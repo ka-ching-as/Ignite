@@ -193,6 +193,9 @@ public struct Article {
                 let trimmedValue = entryParts[1].trimmingCharacters(in: .whitespaces)
                 metadata[entryParts[0].trimmingCharacters(in: .whitespaces)] = trimmedValue
             }
+            if let title = metadata["title"] as? String {
+                self.title = title
+            }
 
             return String(parts[1].trimmingCharacters(in: .whitespacesAndNewlines))
         } else {
