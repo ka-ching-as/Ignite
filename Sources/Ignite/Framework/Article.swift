@@ -144,7 +144,8 @@ public struct Article {
 
         let site = PublishingContext.shared.site
         // Use whatever Markdown renderer was configured for the site we're publishing.
-        let parser = try site.articleRenderer.init(markdown: processed, removeTitleFromBody: true)
+        let hasTitle = (self.metadata["title"] as? String) != nil
+        let parser = try site.articleRenderer.init(markdown: processed, removeTitleFromBody: !hasTitle)
 
         self.text = parser.body
         self.description = parser.description.strippingTags()
@@ -192,9 +193,6 @@ public struct Article {
 
                 let trimmedValue = entryParts[1].trimmingCharacters(in: .whitespaces)
                 metadata[entryParts[0].trimmingCharacters(in: .whitespaces)] = trimmedValue
-            }
-            if let title = metadata["title"] as? String {
-                self.title = title
             }
 
             return String(parts[1].trimmingCharacters(in: .whitespacesAndNewlines))
