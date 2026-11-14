@@ -27,6 +27,24 @@ struct ArticleRendererTests {
         #expect(element.body == "<\(expectedTag)>\(expectedContent)</\(expectedTag)>")
     }
 
+    @Test("Text is escaped for HTML", arguments: [
+        ("Use &lt;strong> for bold", "<p>Use &lt;strong&gt; for bold</p>"),
+        ("Fish & chips", "<p>Fish &amp; chips</p>"),
+        ("Inline `<div>` code", "<p>Inline <code>&lt;div&gt;</code> code</p>"),
+        ("```\n<p>a & b</p>\n```", "<pre><code>&lt;p&gt;a &amp; b&lt;/p&gt;\n</code></pre>"),
+        ("![A \"quoted\" alt](/a.png)", #"<p><img src="/a.png" alt="A &quot;quoted&quot; alt" class="img-fluid"></p>"#),
+    ])
+    func escapesText(markdown: String, expected: String) async throws {
+        let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)
+        #expect(element.body == expected)
+    }
+
+    @Test("Inline and block HTML is passed through")
+    func passesHTMLThrough() async throws {
+        let element = MarkdownToHTML(markdown: "<h6 class=\"pre-head\">A</h6>\n\nSome <b>bold</b> text", removeTitleFromBody: false)
+        #expect(element.body == "<h6 class=\"pre-head\">A</h6>\n<p>Some <b>bold</b> text</p>")
+    }
+
     @Test("Markdown heading remove title from body")
     func removeMarkdownTitleFromBody() async throws {
         let element = MarkdownToHTML(

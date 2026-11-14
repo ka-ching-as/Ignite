@@ -67,9 +67,9 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// CSS to remember which language was used.
     public func visitCodeBlock(_ codeBlock: Markdown.CodeBlock) -> String {
         if let language = codeBlock.language {
-            #"<pre><code class="language-\#(language.lowercased())">\#(codeBlock.code)</code></pre>"#
+            #"<pre><code class="language-\#(language.lowercased())">\#(codeBlock.code.htmlEscaped())</code></pre>"#
         } else {
-            #"<pre><code>\#(codeBlock.code)</code></pre>"#
+            #"<pre><code>\#(codeBlock.code.htmlEscaped())</code></pre>"#
         }
     }
 
@@ -138,7 +138,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// appends Bootstrap's `img-fluid` CSS class so that images resize.
     public func visitImage(_ image: Markdown.Image) -> String {
         if let source = image.source {
-            let title = image.plainText
+            let title = image.plainText.htmlEscaped()
             return #"<img src="\#(source)" alt="\#(title)" class="img-fluid">"#
         } else {
             return ""
@@ -149,7 +149,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// - Parameter inlineCode: The inline code markup to process.
     /// - Returns: A HTML <code> tag containing the code.
     mutating public func visitInlineCode(_ inlineCode: Markdown.InlineCode) -> String {
-        "<code>\(inlineCode.code)</code>"
+        "<code>\(inlineCode.code.htmlEscaped())</code>"
     }
 
     /// Processes a chunk of inline HTML markup.
@@ -320,9 +320,9 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
 
     /// Processes plain text markup.
     /// - Parameter text: The plain text markup to process.
-    /// - Returns: The same text that was read as input.
+    /// - Returns: The text, escaped for use in HTML.
     mutating public func visitText(_ text: Markdown.Text) -> String {
-        text.plainText
+        text.plainText.htmlEscaped()
     }
 
     /// Process thematic break markup. This is written as --- in Markdown.
