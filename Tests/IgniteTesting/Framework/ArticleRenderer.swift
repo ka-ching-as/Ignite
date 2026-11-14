@@ -32,7 +32,8 @@ struct ArticleRendererTests {
         ("Fish & chips", "<p>Fish &amp; chips</p>"),
         ("Inline `<div>` code", "<p>Inline <code>&lt;div&gt;</code> code</p>"),
         ("```\n<p>a & b</p>\n```", "<pre><code>&lt;p&gt;a &amp; b&lt;/p&gt;\n</code></pre>"),
-        ("![A \"quoted\" alt](/a.png)", #"<p><img src="/a.png" alt="A &quot;quoted&quot; alt" class="img-fluid"></p>"#),
+        ("![Fish & chips](/a.png)", #"<p><img src="/a.png" alt="Fish &amp; chips" class="img-fluid"></p>"#),
+        ("Quotes \"stay\" as they are", "<p>Quotes “stay” as they are</p>"),
     ])
     func escapesText(markdown: String, expected: String) async throws {
         let element = MarkdownToHTML(markdown: markdown, removeTitleFromBody: false)

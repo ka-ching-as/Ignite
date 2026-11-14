@@ -69,7 +69,7 @@ import Testing
         let output = element.markupString()
 
         #expect(output == """
-        <p><em>i</em>, <strong>b</strong>, and <em><strong>b&i</strong></em></p>
+        <p><em>i</em>, <strong>b</strong>, and <em><strong>b&amp;i</strong></em></p>
         """)
     }
 

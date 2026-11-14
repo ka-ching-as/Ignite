@@ -138,7 +138,7 @@ public struct MarkdownToHTML: ArticleRenderer, MarkupVisitor {
     /// appends Bootstrap's `img-fluid` CSS class so that images resize.
     public func visitImage(_ image: Markdown.Image) -> String {
         if let source = image.source {
-            let title = image.plainText.htmlEscaped()
+            let title = image.plainText.htmlEscaped(forAttribute: true)
             return #"<img src="\#(source)" alt="\#(title)" class="img-fluid">"#
         } else {
             return ""

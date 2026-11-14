@@ -6,9 +6,9 @@
 //
 
 extension String {
-    /// This string with the characters that have a meaning in HTML text and
-    /// attribute values (`&`, `<`, `>` and `"`) replaced by character references.
-    func htmlEscaped() -> String {
+    /// This string with the characters that have a meaning in HTML text (`&`, `<`
+    /// and `>`) replaced by character references; for an attribute value, `"` too.
+    func htmlEscaped(forAttribute: Bool = false) -> String {
         var result = ""
         result.reserveCapacity(utf8.count)
         for character in self {
@@ -16,7 +16,7 @@ extension String {
             case "&": result += "&amp;"
             case "<": result += "&lt;"
             case ">": result += "&gt;"
-            case "\"": result += "&quot;"
+            case "\"" where forAttribute: result += "&quot;"
             default: result.append(character)
             }
         }
